@@ -34,15 +34,19 @@ class App extends Component {
 
   render() {
     const {data = []} = this.state;
-    console.log("render ", data)
+    console.log("render ", data);
+    const dimension = {
+      height: 400,
+      width: 800,
+      margin: {top: 20, right: 20, bottom: 100, left: 80}
+    }
+
     return (
       <div>
         <h1>Chart</h1>
         <Chart
           data={data}
-          margin={{top: 20, right: 20, bottom: 100, left: 80}}
-          height={400}
-          width={800}
+          dimension={dimension}
           id="d3-graph"
           backgroundColor="#e6e6e6"
           foregroundColor="#00ff00"
