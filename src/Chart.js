@@ -7,43 +7,7 @@ function axisX(data, dimension) {
   return axisX;
 }
 
-function axisY(data, dimension) {
-  const axisY = d3.scaleLinear().range([dimension.height, 0]);
-  axisY.domain([
-    d3.min(data, d => d.close),
-    d3.max(data, d => d.close)
-  ]);
-  return axisY;
-}
-
-function line(axis) {
-  return d3.line()
-    .x(data => axis.x(data.date))
-    .y(data => axis.y(data.close));
-}
-
-function area(axis, dimension) {
-  return d3.area()
-    .x(data => axis.x(data.date))
-    .y0(dimension.height)
-    .y1(data => axis.y(data.close));
-}
-
-function drawLine(svg, data, axis) {
-  svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .attr("d", line(axis));
-}
-
-function drawArea(svg, data, axis, dimension) {
-  svg.append("path")
-    .data([data])
-    .attr("class", "area")
-    .attr("d", area(axis, dimension));
-}
-
-function drawAxis(svg, data, axis, dimension) {
+function drawAxisX(svg, data, axis, dimension) {
   const {height, width, margin} = dimension;
 
   svg.append("g")
@@ -61,6 +25,19 @@ function drawAxis(svg, data, axis, dimension) {
     .attr("y", height + margin.top + 80)
     .style("text-anchor", "middle")
     .text("Date");
+}
+
+function axisY(data, dimension) {
+  const axisY = d3.scaleLinear().range([dimension.height, 0]);
+  axisY.domain([
+    d3.min(data, d => d.close),
+    d3.max(data, d => d.close)
+  ]);
+  return axisY;
+}
+
+function drawAxisY(svg, data, axis, dimension) {
+  const {height, margin} = dimension;
 
   svg.append("g")
     .call(d3.axisLeft(axis.y));
@@ -72,6 +49,62 @@ function drawAxis(svg, data, axis, dimension) {
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Price");
+}
+
+function line(axis) {
+  return d3.line()
+    .x(data => axis.x(data.date))
+    .y(data => axis.y(data.close));
+}
+
+function drawLine(svg, data, axis) {
+  svg.append("path")
+    .data([data])
+    .attr("class", "line")
+    .attr("d", line(axis));
+}
+
+function area(axis, dimension) {
+  return d3.area()
+    .x(data => axis.x(data.date))
+    .y0(dimension.height)
+    .y1(data => axis.y(data.close));
+}
+
+function drawArea(svg, data, axis, dimension) {
+  svg.append("path")
+    .data([data])
+    .attr("class", "area")
+    .attr("d", area(axis, dimension));
+}
+
+function gridLinesX(axis) {
+  return d3.axisBottom(axis.x)
+    .ticks(10)
+}
+
+function drawGridLinesX(svg, axis, dimension) {
+  svg.append("g")
+    .attr("class", "grid")
+    .attr("transform", "translate(0," + dimension.height + ")")
+    .call(gridLinesX(axis)
+      .tickSize(-dimension.height)
+      .tickFormat("")
+    )
+}
+
+function gridLinesY(axis) {
+  return d3.axisLeft(axis.y)
+    .ticks(10)
+}
+
+function drawGridLinesY(svg, axis, dimension) {
+  svg.append("g")
+    .attr("class", "grid")
+    .call(gridLinesY(axis)
+      .tickSize(-dimension.width)
+      .tickFormat("")
+    )
 }
 
 function createSvg(graph, id, dimension) {
@@ -97,7 +130,10 @@ function draw(graph, props) {
 
   drawLine(svg, data, axis)
   drawArea(svg, data, axis, dimension)
-  drawAxis(svg, data, axis, dimension)
+  drawAxisX(svg, data, axis, dimension)
+  drawAxisY(svg, data, axis, dimension)
+  drawGridLinesX(svg, axis, dimension)
+  drawGridLinesY(svg, axis, dimension)
 }
 
 export default class Chart extends Component {
@@ -114,10 +150,6 @@ export default class Chart extends Component {
   }
 
   componentDidUpdate() {
-    this.redraw();
-  }
-
-  redraw() {
     const svg = d3.select(this.props.id);
     svg.remove();
     draw(this.refs.graph, this.props);

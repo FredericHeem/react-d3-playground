@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chart from './Chart';
 import * as d3 from "d3";
 import './App.css';
+import './Chart.css'
 
 function loadData() {
   const parseTime = d3.timeParse("%Y-%m-%d");
@@ -48,8 +49,6 @@ class App extends Component {
           data={data}
           dimension={dimension}
           id="d3-graph"
-          backgroundColor="#e6e6e6"
-          foregroundColor="#00ff00"
           />
       </div>
     );
