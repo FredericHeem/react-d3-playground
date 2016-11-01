@@ -29,24 +29,24 @@ function area(axis, dimension) {
     .y1(data => axis.y(data.close));
 }
 
-function drawLine(context, data, axis) {
-  context.append("path")
+function drawLine(svg, data, axis) {
+  svg.append("path")
     .data([data])
     .attr("class", "line")
     .attr("d", line(axis));
 }
 
-function drawArea(context, data, axis, dimension) {
-  context.append("path")
+function drawArea(svg, data, axis, dimension) {
+  svg.append("path")
     .data([data])
     .attr("class", "area")
     .attr("d", area(axis, dimension));
 }
 
-function drawAxis(context, data, axis, dimension) {
+function drawAxis(svg, data, axis, dimension) {
   const {height, width, margin} = dimension;
 
-  context.append("g")
+  svg.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(axis.x).tickFormat(d3.timeFormat("%Y-%b-%d")))
     .selectAll("text")
@@ -56,23 +56,48 @@ function drawAxis(context, data, axis, dimension) {
     .attr("transform", "rotate(-65)");
 
   // text label for the x axis
-  context.append("text")
+  svg.append("text")
     .attr("x", width / 2)
     .attr("y", height + margin.top + 80)
     .style("text-anchor", "middle")
     .text("Date");
 
-  context.append("g")
+  svg.append("g")
     .call(d3.axisLeft(axis.y));
 
-  context.append("text")
+  svg.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Price");
+}
 
+function createSvg(graph, id, dimension) {
+  const {height, width, margin} = dimension;
+  return d3.select(graph).append('svg')
+    .attr('height', height + margin.top + margin.bottom)
+    .attr('width', width + margin.left + margin.right)
+    .attr('id', id)
+    .append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+}
+
+function draw(graph, props) {
+  const { data, id, dimension} = props;
+  if (data.length === 0) {
+    return
+  }
+  const svg = createSvg(graph, id, dimension)
+  const axis = {
+    x: axisX(data, dimension),
+    y: axisY(data, dimension)
+  }
+
+  drawLine(svg, data, axis)
+  drawArea(svg, data, axis, dimension)
+  drawAxis(svg, data, axis, dimension)
 }
 
 export default class Chart extends Component {
@@ -80,50 +105,22 @@ export default class Chart extends Component {
 
   propTypes: {
     id: PropTypes.string,
-    dimension: PropTypes.object,
-    backgroundColor: PropTypes.string,
-    foregroundColor: PropTypes.string
+    data: PropTypes.object,
+    dimension: PropTypes.object
   }
 
   componentDidMount() {
-    this.draw();
+    draw(this.refs.graph, this.props);
   }
 
   componentDidUpdate() {
     this.redraw();
   }
 
-  draw() {
-    if (this.props.data.length === 0) {
-      return
-    }
-    const context = this.setContext();
-    const {data, dimension} = this.props;
-    const axis = {
-      x: axisX(data, dimension),
-      y: axisY(data, dimension)
-    }
-
-    drawLine(context, data, axis)
-    drawArea(context, data, axis, dimension)
-    drawAxis(context, data, axis, dimension)
-  }
-
   redraw() {
-    const context = d3.select(this.props.id);
-    context.remove();
-    this.draw();
-  }
-
-  setContext() {
-    const { dimension, id} = this.props;
-    const {height, width, margin} = dimension;
-    return d3.select(this.refs.graph).append('svg')
-      .attr('height', height + margin.top + margin.bottom)
-      .attr('width', width + margin.left + margin.right)
-      .attr('id', id)
-      .append('g')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    const svg = d3.select(this.props.id);
+    svg.remove();
+    draw(this.refs.graph, this.props);
   }
 
   render() {

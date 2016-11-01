@@ -36,8 +36,8 @@ class App extends Component {
     const {data = []} = this.state;
     console.log("render ", data);
     const dimension = {
-      height: 400,
-      width: 800,
+      height: 300,
+      width: 600,
       margin: {top: 20, right: 20, bottom: 100, left: 80}
     }
 
