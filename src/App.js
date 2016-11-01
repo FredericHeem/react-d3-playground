@@ -1,33 +1,52 @@
 import React, { Component } from 'react';
-import ProgressArc from './ProgressArc';
+import Chart from './Chart';
+import * as d3 from "d3";
+import './App.css';
+
+function loadData() {
+  const parseTime = d3.timeParse("%Y-%m-%d");
+
+  return new Promise((resolve, reject) => {
+    d3.csv("data.csv", function (error, data) {
+      console.log("data loaded ", data.length)
+      if (error) reject(error);
+
+      data.forEach(function (d) {
+        d.date = parseTime(d.Date);
+        d.close = +d.Close;
+      });
+      //console.log("data ", data)
+      resolve(data)
+    })
+  })
+}
 
 class App extends Component {
   constructor(props) {
-     super(props);
-     this.state = {percentComplete: 0.3};
-     this.togglePercent = this.togglePercent.bind(this);
-   }
+    super(props);
+    this.state = { percentComplete: 0.3 };
+  }
 
-  togglePercent() {
-    const percentage = this.state.percentComplete === 0.3 ? 0.7 : 0.3;
-    this.setState({percentComplete: percentage});
+  async componentDidMount() {
+    const data = await loadData();
+    this.setState({data})
   }
 
   render() {
-    console.log(this.state.percentComplete);
+    const {data = []} = this.state;
+    console.log("render ", data)
     return (
       <div>
-        <a onClick={this.togglePercent}>Toggle Arc</a>
-        <ProgressArc
-          height={300}
-          width={300}
-          innerRadius={100}
-          outerRadius={110}
-          id="d3-arc"
+        <h1>Chart</h1>
+        <Chart
+          data={data}
+          margin={{top: 20, right: 20, bottom: 100, left: 80}}
+          height={400}
+          width={800}
+          id="d3-graph"
           backgroundColor="#e6e6e6"
           foregroundColor="#00ff00"
-          percentComplete={this.state.percentComplete}
-        />
+          />
       </div>
     );
   }
