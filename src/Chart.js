@@ -7,7 +7,7 @@ function axisX(data, dimension) {
   return axisX;
 }
 
-function drawAxisX(svg, data, axis, dimension) {
+function drawAxisX(svg, axis, dimension) {
   const {height, width, margin} = dimension;
 
   svg.append("g")
@@ -78,9 +78,25 @@ function drawArea(svg, data, axis, dimension) {
     .attr("d", area(axis, dimension));
 }
 
+function drawGradient(svg, data, axis, dimension) {
+  svg.append("linearGradient")
+    .attr("id", "area-gradient")
+    .attr("gradientUnits", "userSpaceOnUse")
+    .attr("x1", 0).attr("y1", axis.y(d3.min(data, d => d.close)))
+    .attr("x2", 0).attr("y2", axis.y(d3.max(data, d => d.close)))
+  .selectAll("stop")
+    .data([
+     {offset: "0%", color: "steelblue"},
+      {offset: "100%", color: "lightsteelblue"}
+    ])
+  .enter().append("stop")
+    .attr("offset", d => d.offset)
+    .attr("stop-color", d => d.color);
+}
+
 function gridLinesX(axis) {
   return d3.axisBottom(axis.x)
-    .ticks(10)
+    .ticks(8)
 }
 
 function drawGridLinesX(svg, axis, dimension) {
@@ -95,7 +111,7 @@ function drawGridLinesX(svg, axis, dimension) {
 
 function gridLinesY(axis) {
   return d3.axisLeft(axis.y)
-    .ticks(10)
+    .ticks(8)
 }
 
 function drawGridLinesY(svg, axis, dimension) {
@@ -130,7 +146,8 @@ function draw(graph, props) {
 
   drawLine(svg, data, axis)
   drawArea(svg, data, axis, dimension)
-  drawAxisX(svg, data, axis, dimension)
+  drawGradient(svg, data, axis, dimension)
+  drawAxisX(svg, axis, dimension)
   drawAxisY(svg, data, axis, dimension)
   drawGridLinesX(svg, axis, dimension)
   drawGridLinesY(svg, axis, dimension)
