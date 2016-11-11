@@ -58,24 +58,28 @@ class App extends Component {
     console.log("render ", data);
     const dimension = {
       height: 300,
-      width: 500,
+      width: 600,
       margin: { top: 20, right: 20, bottom: 100, left: 80 }
     }
 
     return (
-      <div>
-        <h1>Histogram</h1>
-        <Histogram
-          data={rateOfReturns}
-          dimension={dimension}
-          id="d3-histogram"
-          />
-        <h1>Chart</h1>
-        <Chart
-          data={data}
-          dimension={dimension}
-          id="d3-graph"
-          />
+      <div className='diagram-container'>
+        <div className='diagram'>
+          <h1>Histogram</h1>
+          <Histogram
+            data={rateOfReturns}
+            dimension={dimension}
+            id="d3-histogram"
+            />
+        </div>
+        <div className='diagram'>
+          <h1>Chart</h1>
+          <Chart
+            data={data}
+            dimension={dimension}
+            id="d3-graph"
+            />
+        </div>
       </div>
     );
   }

@@ -1,3 +1,22 @@
+.diagram-container{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: space-between;
+    align-items: center;
+}
 
+.diagram {
+    height: 500px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
+    margin:20px;
+    padding:20px;
+    border: lightgray solid 1px;
+}
 
-
+h1 {
+  text-align: center;
+}
