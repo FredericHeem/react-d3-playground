@@ -18,7 +18,7 @@ function drawAxisX(svg, axis, dimension) {
 
   svg.append("text")
     .attr("x", width / 2)
-    .attr("y", height + margin.top + 80)
+    .attr("y", height + margin.top + 40)
     .style("text-anchor", "middle")
     .text("Rate Of Return (%)");
 }

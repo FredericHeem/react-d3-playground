@@ -1,32 +1,13 @@
 import React, { Component } from 'react';
+import * as d3 from "d3";
 import Chart from './Chart';
 import Histogram from './Histogram';
-import * as d3 from "d3";
 import './App.css';
 import './Chart.css'
 import './Histogram.css'
-const parseTime = d3.timeParse("%Y-%m-%d");
+import DataLoader from './DataLoader'
 
-export function parseData(data) {
-  data.forEach(function (d) {
-    d.date = parseTime(d.Date);
-    d.close = +d.Close;
-  });
-  return data;
-}
-
-export function loadData() {
-  return new Promise((resolve, reject) => {
-    d3.csv("table.csv", function (error, data) {
-      //console.log("data loaded ", data.length)
-      if (error) reject(error);
-
-      data = parseData(data)
-      //console.log("data ", data)
-      resolve(data)
-    })
-  })
-}
+const dataLoader = DataLoader()
 
 export function computeRateOfReturns(data) {
   let returns = []
@@ -48,7 +29,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const data = await loadData();
+    const data = await dataLoader.load();
     const rateOfReturns = computeRateOfReturns(data)
     this.setState({ data, rateOfReturns })
   }
