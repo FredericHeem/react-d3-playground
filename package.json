@@ -1,6 +1,7 @@
 {
   "name": "react-d3-playground",
   "version": "0.1.0",
+  "homepage": "http://fredericheem.github.io/react-d3-playground",
   "devDependencies": {
     "react-scripts": "0.6.1"
   },
