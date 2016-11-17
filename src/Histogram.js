@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
 
+import './Tooltip.css'
+
 function axisX(data, dimension) {
   const axisX = d3.scaleLinear().rangeRound([0, dimension.width]).domain([
     d3.min(data),
@@ -66,7 +68,6 @@ function drawHistogram(svg, data, axis, dimension, bins) {
     .attr("height", d => dimension.height - axis.y(d.length / bins.length))
 }
 
-
 function createSvg(graph, id, dimension) {
   const {height, width, margin} = dimension;
   return d3.select(graph).append('svg')
@@ -75,6 +76,13 @@ function createSvg(graph, id, dimension) {
     .attr('id', id)
     .append('g')
     .attr('transform', `translate(${margin.left}, ${margin.top})`);
+}
+
+function createTooltip({id}) {
+
+  const div = d3.select(id).append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 }
 
 function draw(graph, props) {
@@ -88,6 +96,8 @@ function draw(graph, props) {
     x: axisX(data, dimension)
   }
 
+  createTooltip(props)
+
   console.log("data.length ", data.length)
   const bins = createBins(axis, data);
   console.log("bins.length ", bins.length)
@@ -98,7 +108,7 @@ function draw(graph, props) {
   const sumLengthBin = bins.reduce((acc, bin) => {
     return acc + bin.length
   }, 0)
-  console.log("sumLengthBin" , sumLengthBin);
+  console.log("sumLengthBin", sumLengthBin);
   axis.y = axisY(data, dimension, bins)
   drawHistogram(svg, data, axis, dimension, bins)
   drawAxisX(svg, axis, dimension)

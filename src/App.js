@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import * as d3 from "d3";
 import Chart from './Chart';
 import Histogram from './Histogram';
+import ScatterPlot from './ScatterPlot'
 import './App.css';
 import './Chart.css'
 import './Histogram.css'
+import returnStdDev from './data/return-stddev'
 import DataLoader from './DataLoader'
 
 const dataLoader = DataLoader()
@@ -45,6 +47,14 @@ class App extends Component {
 
     return (
       <div className='diagram-container'>
+        <div className='diagram'>
+          <h1>Scatter Plot</h1>
+          <ScatterPlot
+            data={returnStdDev}
+            dimension={dimension}
+            id="d3-scatterplot"
+            />
+        </div>
         <div className='diagram'>
           <h1>Histogram</h1>
           <Histogram
