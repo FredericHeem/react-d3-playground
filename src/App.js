@@ -52,6 +52,18 @@ class App extends Component {
           <ScatterPlot
             data={returnStdDev}
             dimension={dimension}
+            config={{
+              axis: {
+                x: {
+                  title: "Standard deviation of return (%)",
+                  domain: [0, 30]
+                },
+                y: {
+                  title:'Expected return (%)',
+                  domain: [0, 18]
+                }
+              }
+            }}
             id="d3-scatterplot"
             />
         </div>

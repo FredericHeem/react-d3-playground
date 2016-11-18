@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
 
-function axisX(data, dimension) {
-  const axisX = d3.scaleLinear().range([dimension.width, 0]);
-  axisX.domain([30, 0]);
+function axisX(data, config, dimension) {
+  const axisX = d3.scaleLinear().range([0, dimension.width]);
+  axisX.domain(config.axis.x.domain);
   return axisX;
 }
 
-function drawAxisX(svg, axis, dimension) {
+function drawAxisX(svg, axis, config, dimension) {
   const {height, width, margin} = dimension;
 
   svg.append("g")
@@ -19,16 +19,16 @@ function drawAxisX(svg, axis, dimension) {
     .attr("x", width)
     .attr("y", height + margin.top - 30)
     .style("text-anchor", "end")
-    .text("Standard deviation of return (%)");
+    .text(config.axis.x.title);
 }
 
-function axisY(data, dimension) {
+function axisY(data, config, dimension) {
   const axisY = d3.scaleLinear().range([dimension.height, 0]);
-  axisY.domain([0, 16]);
+  axisY.domain(config.axis.y.domain);
   return axisY;
 }
 
-function drawAxisY(svg, data, axis, dimension) {
+function drawAxisY(svg, data, config, axis, dimension) {
   const {height, margin} = dimension;
 
   svg.append("g")
@@ -39,7 +39,7 @@ function drawAxisY(svg, data, axis, dimension) {
     .attr("x", 10)
     .attr("dy", "1em")
     .style("text-anchor", "start")
-    .text("Expected return (%)")
+    .text(config.axis.y.title)
 }
 
 function drawPlot(svg, data, axis) {
@@ -62,19 +62,19 @@ function createSvg(graph, id, dimension) {
 }
 
 function draw(graph, props) {
-  const { data, id, dimension} = props;
+  const { data, id, config, dimension} = props;
   if (data.length === 0) {
     return
   }
   const svg = createSvg(graph, id, dimension)
   const axis = {
-    x: axisX(data, dimension),
-    y: axisY(data, dimension)
+    x: axisX(data, config, dimension),
+    y: axisY(data, config, dimension)
   }
 
   drawPlot(svg, data, axis)
-  drawAxisX(svg, axis, dimension)
-  drawAxisY(svg, data, axis, dimension)
+  drawAxisX(svg, axis, config, dimension)
+  drawAxisY(svg, data, config, axis, dimension)
 }
 
 export default class ScatterPlot extends Component {

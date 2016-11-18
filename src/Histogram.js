@@ -98,17 +98,17 @@ function draw(graph, props) {
 
   createTooltip(props)
 
-  console.log("data.length ", data.length)
+  //console.log("data.length ", data.length)
   const bins = createBins(axis, data);
-  console.log("bins.length ", bins.length)
+  //console.log("bins.length ", bins.length)
   bins.forEach(bin => {
     console.log(bin)
-    console.log("length ", bin.length)
+    //console.log("length ", bin.length)
   })
   const sumLengthBin = bins.reduce((acc, bin) => {
     return acc + bin.length
   }, 0)
-  console.log("sumLengthBin", sumLengthBin);
+  //console.log("sumLengthBin", sumLengthBin);
   axis.y = axisY(data, dimension, bins)
   drawHistogram(svg, data, axis, dimension, bins)
   drawAxisX(svg, axis, dimension)
