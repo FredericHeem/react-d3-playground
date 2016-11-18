@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as d3 from "d3";
 import Chart from './Chart';
 import Histogram from './Histogram';
 import ScatterPlot from './ScatterPlot'
@@ -8,21 +7,9 @@ import './Chart.css'
 import './Histogram.css'
 import returnStdDev from './data/return-stddev'
 import DataLoader from './DataLoader'
+import {computeRateOfReturns} from './Utils';
 
 const dataLoader = DataLoader()
-
-export function computeRateOfReturns(data) {
-  let returns = []
-  for (let i = 1; i < data.length; i++) {
-    const price = data[i].close;
-    const priceBefore = data[i - 1].close
-    returns.push((price - priceBefore) / priceBefore * 100)
-  }
-  //console.log(returns)
-  console.log("Min returns ", d3.min(returns))
-  console.log("Max returns ", d3.max(returns))
-  return returns;
-}
 
 class App extends Component {
   constructor(props) {

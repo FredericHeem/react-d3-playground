@@ -10,9 +10,11 @@
     "d3-axis": "1.0.3",
     "d3-scale": "1.0.3",
     "d3-shape": "1.0.3",
+    "lodash": "4.17.2",
     "mathjs": "3.7.0",
     "react": "15.3.2",
-    "react-dom": "15.3.2"
+    "react-dom": "15.3.2",
+    "reactabular": "7.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
