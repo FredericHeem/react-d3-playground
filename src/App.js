@@ -7,7 +7,7 @@ import './Chart.css'
 import './Histogram.css'
 import returnStdDev from './data/return-stddev'
 import DataLoader from './DataLoader'
-import {computeRateOfReturns} from './Utils';
+import {computeRateOfReturns} from './MathUtils';
 
 const dataLoader = DataLoader()
 
@@ -25,7 +25,7 @@ class App extends Component {
 
   render() {
     const {data = [], rateOfReturns = []} = this.state;
-    console.log("render ", data);
+    //console.log("render ", data);
     const dimension = {
       height: 300,
       width: 600,
@@ -35,11 +35,29 @@ class App extends Component {
     return (
       <div className='diagram-container'>
         <div className='diagram'>
+          <h1>Chart</h1>
+          <Chart
+            data={data}
+            id="d3-graph"
+            config={{
+              dimension,
+              axis: {
+                x: {
+                  title: "Date"
+                },
+                y: {
+                  title:'Price ($)'
+                }
+              }
+            }}
+            />
+        </div>
+        <div className='diagram'>
           <h1>Scatter Plot</h1>
           <ScatterPlot
             data={returnStdDev}
-            dimension={dimension}
             config={{
+              dimension,
               axis: {
                 x: {
                   title: "Standard deviation of return (%)",
@@ -57,19 +75,23 @@ class App extends Component {
         <div className='diagram'>
           <h1>Histogram</h1>
           <Histogram
-            data={rateOfReturns}
-            dimension={dimension}
             id="d3-histogram"
+            data={rateOfReturns}
+            config={{
+              dimension,
+              axis: {
+                x: {
+                  title: "Rate Of Return (%)"
+                },
+                y: {
+                  title: "Frequency (%)"
+                }
+              }
+            }}
+
             />
         </div>
-        <div className='diagram'>
-          <h1>Chart</h1>
-          <Chart
-            data={data}
-            dimension={dimension}
-            id="d3-graph"
-            />
-        </div>
+
       </div>
     );
   }

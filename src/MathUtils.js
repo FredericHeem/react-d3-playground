@@ -8,7 +8,7 @@ export function computeRateOfReturns(data) {
     returns.push((price - priceBefore) / priceBefore * 100)
   }
   //console.log(returns)
-  console.log("Min returns ", d3.min(returns))
-  console.log("Max returns ", d3.max(returns))
+  //console.log("Min returns ", d3.min(returns))
+  //console.log("Max returns ", d3.max(returns))
   return returns;
 }

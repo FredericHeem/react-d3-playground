@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
-
+import {createSvg} from './D3Utils';
 import './Tooltip.css'
 
-function axisX(data, dimension) {
-  const axisX = d3.scaleLinear().rangeRound([0, dimension.width]).domain([
+function axisX(data, config) {
+  const axisX = d3.scaleLinear().rangeRound([0, config.dimension.width]).domain([
     d3.min(data),
     d3.max(data)
   ]);
   return axisX;
 }
 
-function drawAxisX(svg, axis, dimension) {
+function drawAxisX(svg, axis, config) {
+  const {dimension} = config
   const {height, width, margin} = dimension;
 
   svg.append("g")
@@ -29,9 +30,9 @@ function createBins(axis, data) {
   return d3.histogram().domain(axis.x.domain()).thresholds(axis.x.ticks(40))(data)
 }
 
-function axisY(data, dimension, bins) {
+function axisY(data, config, bins) {
   const axisY = d3.scaleLinear()
-    .range([dimension.height, 0])
+    .range([config.dimension.height, 0])
     .domain([
       0,
       d3.max(bins, bin => bin.length / bins.length)
@@ -39,7 +40,8 @@ function axisY(data, dimension, bins) {
   return axisY;
 }
 
-function drawAxisY(svg, data, axis, dimension) {
+function drawAxisY(svg, data, axis, config) {
+  const {dimension} = config
   const {height, margin} = dimension;
 
   svg.append("g")
@@ -51,11 +53,11 @@ function drawAxisY(svg, data, axis, dimension) {
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Frequency (%)");
+    .text(config.axis.y.title);
 }
 
-function drawHistogram(svg, data, axis, dimension, bins) {
-
+function drawHistogram(svg, data, axis, config, bins) {
+  const {dimension} = config
   const bar = svg.selectAll(".bar")
     .data(bins)
     .enter().append("g")
@@ -68,32 +70,22 @@ function drawHistogram(svg, data, axis, dimension, bins) {
     .attr("height", d => dimension.height - axis.y(d.length / bins.length))
 }
 
-function createSvg(graph, id, dimension) {
-  const {height, width, margin} = dimension;
-  return d3.select(graph).append('svg')
-    .attr('height', height + margin.top + margin.bottom)
-    .attr('width', width + margin.left + margin.right)
-    .attr('id', id)
-    .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-}
-
 function createTooltip({id}) {
-
   const div = d3.select(id).append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 }
 
 function draw(graph, props) {
-  const { data, id, dimension} = props;
+  const { data, id, config} = props;
+  const {dimension} = config
   if (data.length === 0) {
     return
   }
 
   const svg = createSvg(graph, id, dimension)
   const axis = {
-    x: axisX(data, dimension)
+    x: axisX(data, config)
   }
 
   createTooltip(props)
@@ -109,10 +101,10 @@ function draw(graph, props) {
     return acc + bin.length
   }, 0)
   //console.log("sumLengthBin", sumLengthBin);
-  axis.y = axisY(data, dimension, bins)
-  drawHistogram(svg, data, axis, dimension, bins)
-  drawAxisX(svg, axis, dimension)
-  drawAxisY(svg, data, axis, dimension)
+  axis.y = axisY(data, config, bins)
+  drawHistogram(svg, data, axis, config, bins)
+  drawAxisX(svg, axis, config)
+  drawAxisY(svg, data, axis, config)
 }
 
 export default class Histogram extends Component {
@@ -121,7 +113,7 @@ export default class Histogram extends Component {
   propTypes: {
     id: PropTypes.string,
     data: PropTypes.object,
-    dimension: PropTypes.object
+    config: PropTypes.object
   }
 
   componentDidMount() {

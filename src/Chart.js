@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
+import {createSvg} from './D3Utils';
 
-function axisX(data, dimension) {
+function axisX(data, config) {
+  const {dimension} = config;
   const axisX = d3.scaleTime().range([0, dimension.width]);
   axisX.domain(d3.extent(data, d => d.date));
   return axisX;
 }
 
-function drawAxisX(svg, axis, dimension) {
+function drawAxisX(svg, axis, config) {
+  const {dimension} = config;
   const {height, width, margin} = dimension;
 
   svg.append("g")
@@ -24,19 +27,21 @@ function drawAxisX(svg, axis, dimension) {
     .attr("x", width / 2)
     .attr("y", height + margin.top + 80)
     .style("text-anchor", "middle")
-    .text("Date");
+    .text(config.axis.x.title);
 }
 
-function axisY(data, dimension) {
+function axisY(data, config) {
+  const {dimension} = config;
   const axisY = d3.scaleLinear().range([dimension.height, 0]);
   axisY.domain([
-    d3.min(data, d => d.close),
+    0,
     d3.max(data, d => d.close)
   ]);
   return axisY;
 }
 
-function drawAxisY(svg, data, axis, dimension) {
+function drawAxisY(svg, data, axis, config) {
+  const {dimension} = config;
   const {height, margin} = dimension;
 
   svg.append("g")
@@ -48,7 +53,7 @@ function drawAxisY(svg, data, axis, dimension) {
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Price");
+    .text(config.axis.y.title);
 }
 
 function line(axis) {
@@ -71,14 +76,15 @@ function area(axis, dimension) {
     .y1(data => axis.y(data.close));
 }
 
-function drawArea(svg, data, axis, dimension) {
+function drawArea(svg, data, axis, config) {
+  const {dimension} = config;
   svg.append("path")
     .data([data])
     .attr("class", "area")
     .attr("d", area(axis, dimension));
 }
 
-function drawGradient(svg, data, axis, dimension) {
+function drawGradient(svg, data, axis, config) {
   svg.append("linearGradient")
     .attr("id", "area-gradient")
     .attr("gradientUnits", "userSpaceOnUse")
@@ -99,7 +105,8 @@ function gridLinesX(axis) {
     .ticks(8)
 }
 
-function drawGridLinesX(svg, axis, dimension) {
+function drawGridLinesX(svg, axis, config) {
+  const {dimension} = config;
   svg.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(0," + dimension.height + ")")
@@ -114,7 +121,8 @@ function gridLinesY(axis) {
     .ticks(8)
 }
 
-function drawGridLinesY(svg, axis, dimension) {
+function drawGridLinesY(svg, axis, config) {
+  const {dimension} = config;
   svg.append("g")
     .attr("class", "grid")
     .call(gridLinesY(axis)
@@ -123,39 +131,28 @@ function drawGridLinesY(svg, axis, dimension) {
     )
 }
 
-function createSvg(graph, id, dimension) {
-  const {height, width, margin} = dimension;
-  return d3.select(graph).append('svg')
-    .attr('height', height + margin.top + margin.bottom)
-    .attr('width', width + margin.left + margin.right)
-    .attr('id', id)
-    .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-}
-
 function draw(graph, props) {
-  const { data, id, dimension} = props;
+  const { data, id, config} = props;
+  const {dimension} = config;
   if (data.length === 0) {
     return
   }
   const svg = createSvg(graph, id, dimension)
   const axis = {
-    x: axisX(data, dimension),
-    y: axisY(data, dimension)
+    x: axisX(data, config),
+    y: axisY(data, config)
   }
 
   drawLine(svg, data, axis)
-  drawArea(svg, data, axis, dimension)
-  drawGradient(svg, data, axis, dimension)
-  drawAxisX(svg, axis, dimension)
-  drawAxisY(svg, data, axis, dimension)
-  drawGridLinesX(svg, axis, dimension)
-  drawGridLinesY(svg, axis, dimension)
+  drawArea(svg, data, axis, config)
+  drawGradient(svg, data, axis, config)
+  drawAxisX(svg, axis, config)
+  drawAxisY(svg, data, axis, config)
+  drawGridLinesX(svg, axis, config)
+  drawGridLinesY(svg, axis, config)
 }
 
 export default class Chart extends Component {
-  displayName: 'Chart';
-
   propTypes: {
     id: PropTypes.string,
     data: PropTypes.object,

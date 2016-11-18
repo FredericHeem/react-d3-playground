@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
+import { createSvg } from './D3Utils';
 
 function axisX(data, config, dimension) {
   const axisX = d3.scaleLinear().range([0, dimension.width]);
@@ -35,7 +36,7 @@ function drawAxisY(svg, data, config, axis, dimension) {
     .call(d3.axisLeft(axis.y));
 
   svg.append("text")
-    .attr("y", 0 )
+    .attr("y", 0)
     .attr("x", 10)
     .attr("dy", "1em")
     .style("text-anchor", "start")
@@ -44,25 +45,16 @@ function drawAxisY(svg, data, config, axis, dimension) {
 
 function drawPlot(svg, data, axis) {
   svg.selectAll("dot")
-      .data(data)
+    .data(data)
     .enter().append("circle")
-      .attr("r", 4)
-      .attr("cx", d => axis.x(d.stddev))
-      .attr("cy", d => axis.y(d.mean));
-}
-
-function createSvg(graph, id, dimension) {
-  const {height, width, margin} = dimension;
-  return d3.select(graph).append('svg')
-    .attr('height', height + margin.top + margin.bottom)
-    .attr('width', width + margin.left + margin.right)
-    .attr('id', id)
-    .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    .attr("r", 4)
+    .attr("cx", d => axis.x(d.stddev))
+    .attr("cy", d => axis.y(d.mean));
 }
 
 function draw(graph, props) {
-  const { data, id, config, dimension} = props;
+  const { data, id, config} = props;
+  const {dimension} = config
   if (data.length === 0) {
     return
   }
@@ -78,11 +70,10 @@ function draw(graph, props) {
 }
 
 export default class ScatterPlot extends Component {
-  displayName: 'ScatterPlot';
   propTypes: {
     id: PropTypes.string,
     data: PropTypes.object,
-    dimension: PropTypes.object
+    config: PropTypes.object
   }
 
   componentDidMount() {
