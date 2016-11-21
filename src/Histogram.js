@@ -23,7 +23,7 @@ function drawAxisX(svg, axis, config) {
     .attr("x", width / 2)
     .attr("y", height + margin.top + 40)
     .style("text-anchor", "middle")
-    .text("Rate Of Return (%)");
+    .text(config.axis.x.title);
 }
 
 function createBins(axis, data) {
@@ -71,9 +71,12 @@ function drawHistogram(svg, data, axis, config, bins) {
 }
 
 function createTooltip({id}) {
+  //TODO tooltip
+  /*
   const div = d3.select(id).append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+*/
 }
 
 function draw(graph, props) {
@@ -97,9 +100,11 @@ function draw(graph, props) {
     //console.log(bin)
     //console.log("length ", bin.length)
   })
+  /*
   const sumLengthBin = bins.reduce((acc, bin) => {
     return acc + bin.length
   }, 0)
+  */
   //console.log("sumLengthBin", sumLengthBin);
   axis.y = axisY(data, config, bins)
   drawHistogram(svg, data, axis, config, bins)
