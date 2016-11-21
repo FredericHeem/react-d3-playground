@@ -2,8 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
+import MathJaxSupport from './MathJaxSupport';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+const debug = require("debug");
+debug.disable();
+
+async function init() {
+  const mathJaxSupport = MathJaxSupport()
+  console.log("mathjax init")
+  await mathJaxSupport.init();
+  console.log("mathjax done")
+  ReactDOM.render(
+    <App />,
+    document.getElementById('root')
+  );
+}
+
+init()

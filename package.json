@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "homepage": "http://fredericheem.github.io/react-d3-playground",
   "devDependencies": {
-    "react-scripts": "0.6.1"
+    "react-scripts": "0.7.0"
   },
   "dependencies": {
-    "d3": "4.2.7",
+    "d3": "4.3.0",
     "d3-axis": "1.0.3",
     "d3-scale": "1.0.3",
     "d3-shape": "1.0.3",
     "lodash": "4.17.2",
-    "mathjs": "3.7.0",
-    "react": "15.3.2",
-    "react-dom": "15.3.2",
+    "mathjax": "2.7.0",
+    "mathjs": "3.8.0",
+    "react": "15.4.0",
+    "react-dom": "15.4.0",
+    "react-formula-beautifier": "0.1.4",
     "reactabular": "7.0.0"
   },
   "scripts": {

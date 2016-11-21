@@ -94,7 +94,7 @@ function draw(graph, props) {
   const bins = createBins(axis, data);
   //console.log("bins.length ", bins.length)
   bins.forEach(bin => {
-    console.log(bin)
+    //console.log(bin)
     //console.log("length ", bin.length)
   })
   const sumLengthBin = bins.reduce((acc, bin) => {

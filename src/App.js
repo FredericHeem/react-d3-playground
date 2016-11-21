@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+//import {InlineMath} from 'react-katex';
+//import KaTeX from 'katex';
+//import 'katex/dist/katex.min.css';
+
 import Chart from './Chart';
 import Histogram from './Histogram';
 import ScatterPlot from './ScatterPlot'
@@ -35,24 +39,6 @@ class App extends Component {
     return (
       <div className='diagram-container'>
         <div className='diagram'>
-          <h1>Chart</h1>
-          <Chart
-            data={data}
-            id="d3-graph"
-            config={{
-              dimension,
-              axis: {
-                x: {
-                  title: "Date"
-                },
-                y: {
-                  title:'Price ($)'
-                }
-              }
-            }}
-            />
-        </div>
-        <div className='diagram'>
           <h1>Scatter Plot</h1>
           <ScatterPlot
             data={returnStdDev}
@@ -60,7 +46,7 @@ class App extends Component {
               dimension,
               axis: {
                 x: {
-                  title: "Standard deviation of return (%)",
+                  title: "$\\sigma (\\%)$",
                   domain: [0, 30]
                 },
                 y: {
@@ -91,6 +77,26 @@ class App extends Component {
 
             />
         </div>
+        <div className='diagram'>
+          <h1>Chart</h1>
+          <Chart
+            data={data}
+            id="d3-graph"
+            config={{
+              dimension,
+              axis: {
+                x: {
+                  title: "Date"
+                },
+                y: {
+                  title:'Price ($)'
+                }
+              }
+            }}
+            />
+        </div>
+
+
 
       </div>
     );

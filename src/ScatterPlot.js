@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
 import { createSvg } from './D3Utils';
+import { processTex } from './MathJaxSupport';
 
 function axisX(data, config, dimension) {
   const axisX = d3.scaleLinear().range([0, dimension.width]);
@@ -14,13 +15,25 @@ function drawAxisX(svg, axis, config, dimension) {
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(axis.x).ticks(5))
-
-  // text label for the x axis
+/*
   svg.append("text")
+    .attr("class", "tex")
     .attr("x", width)
     .attr("y", height + margin.top - 30)
     .style("text-anchor", "end")
+    //.text("CIAO")
     .text(config.axis.x.title);
+    */
+
+
+  svg.append('g')
+    .attr("transform", `translate(${width - 40},${height + margin.top - 50})`)
+    .attr('class', 'tex')
+    .append('text')
+    .style("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", height + margin.top - 30)
+    .text(() => config.axis.x.title);
 }
 
 function axisY(data, config, dimension) {
@@ -30,8 +43,6 @@ function axisY(data, config, dimension) {
 }
 
 function drawAxisY(svg, data, config, axis, dimension) {
-  const {height, margin} = dimension;
-
   svg.append("g")
     .call(d3.axisLeft(axis.y));
 
@@ -67,6 +78,7 @@ function draw(graph, props) {
   drawPlot(svg, data, axis)
   drawAxisX(svg, axis, config, dimension)
   drawAxisY(svg, data, config, axis, dimension)
+  processTex(svg, ".tex")
 }
 
 export default class ScatterPlot extends Component {
@@ -81,8 +93,8 @@ export default class ScatterPlot extends Component {
   }
 
   componentDidUpdate() {
-    const svg = d3.select(this.props.id);
-    svg.remove();
+    //const svg = d3.select(this.props.id);
+    //svg.remove();
     //draw(this.refs.graph, this.props);
   }
 
