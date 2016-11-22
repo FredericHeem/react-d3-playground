@@ -15,25 +15,26 @@ function drawAxisX(svg, axis, config, dimension) {
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(axis.x).ticks(5))
-/*
+
   svg.append("text")
     .attr("class", "tex")
     .attr("x", width)
-    .attr("y", height + margin.top - 30)
+    .attr("y", height + margin.top + 30)
     .style("text-anchor", "end")
-    //.text("CIAO")
     .text(config.axis.x.title);
-    */
 
 
+/*
   svg.append('g')
-    .attr("transform", `translate(${width - 40},${height + margin.top - 50})`)
+    .attr("transform", `translate(${width/2},${height + margin.top})`)
+    .attr("text-anchor", 'middle')
     .attr('class', 'tex')
     .append('text')
     .style("text-anchor", "end")
-    .attr("x", width)
+        .attr("x", width)
     .attr("y", height + margin.top - 30)
     .text(() => config.axis.x.title);
+*/
 }
 
 function axisY(data, config, dimension) {
@@ -46,12 +47,21 @@ function drawAxisY(svg, data, config, axis, dimension) {
   svg.append("g")
     .call(d3.axisLeft(axis.y));
 
+  svg.append('g')
+    .attr("transform", `translate(20,10)`)
+    .attr('class', 'tex')
+    .append('text')
+    .style("text-anchor", "start")
+    .text(() => config.axis.y.title);
+
+/*
   svg.append("text")
     .attr("y", 0)
     .attr("x", 10)
     .attr("dy", "1em")
     .style("text-anchor", "start")
     .text(config.axis.y.title)
+    */
 }
 
 function drawPlot(svg, data, axis) {

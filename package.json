@@ -10,6 +10,7 @@
     "d3-axis": "1.0.3",
     "d3-scale": "1.0.3",
     "d3-shape": "1.0.3",
+    "es6-promise": "4.0.5",
     "lodash": "4.17.2",
     "mathjax": "2.7.0",
     "mathjs": "3.8.0",

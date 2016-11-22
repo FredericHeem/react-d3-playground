@@ -46,7 +46,8 @@ class App extends Component {
               dimension,
               axis: {
                 x: {
-                  title: "$\\sigma (\\%)$",
+                  //title: "$\\text{Standard deviation }\\sigma (\\%)$",
+                  title: "Standard deviation (%)",
                   domain: [0, 30]
                 },
                 y: {

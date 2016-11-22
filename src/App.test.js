@@ -1,25 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App, { parseData, computeRateOfReturns } from './App';
+import App from './App';
 import assert from 'assert'
 import ohlc from '../public/ohlc.json'
 import math from 'mathjs'
+import DataLoader from './DataLoader'
+import {computeRateOfReturns} from './MathUtils';
 
-/*
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<App />, div);
 });
-*/
-
-function quantile(data, probability){
-
-}
 
 describe('data', () => {
   let data;
+  const dataLoader = DataLoader()
   beforeEach(async () => {
-    data = parseData(ohlc)
+    data = dataLoader.parse(ohlc)
     assert(data)
   });
 
