@@ -5,7 +5,7 @@ export function AxisX(config, dimension) {
   const {height, width, margin} = dimension;
 
   let scale = d3.scaleLinear()
-    .range([0, dimension.width])
+    .range([0, width])
     .domain(domain);
 
   function draw(svg) {
@@ -29,10 +29,10 @@ export function AxisX(config, dimension) {
 
 export function AxisY(config, dimension) {
   const {legend, domain, ticks} = config;
-  const {height, width, margin} = dimension;
+  const {height} = dimension;
 
   let scale = d3.scaleLinear()
-    .range([dimension.height, 0])
+    .range([height, 0])
     .domain(domain);
 
   function draw(svg) {

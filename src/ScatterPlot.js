@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import * as d3 from "d3";
 import { createSvg } from './D3Utils';
 import { processTex } from './MathJaxSupport';
 import {AxisX, AxisY} from './Axis'
