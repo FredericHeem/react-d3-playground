@@ -2,75 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
 import { createSvg } from './D3Utils';
 import { processTex } from './MathJaxSupport';
-
-function axisX(data, config, dimension) {
-  const axisX = d3.scaleLinear().range([0, dimension.width]);
-  axisX.domain(config.axis.x.domain);
-  return axisX;
-}
-
-function drawAxisX(svg, axis, config, dimension) {
-  const {height, width, margin} = dimension;
-
-  svg.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(axis.x).ticks(5))
-
-  svg.append("text")
-    .attr("class", "tex")
-    .attr("x", width)
-    .attr("y", height + margin.top + 30)
-    .style("text-anchor", "end")
-    .text(config.axis.x.title);
-
-
-/*
-  svg.append('g')
-    .attr("transform", `translate(${width/2},${height + margin.top})`)
-    .attr("text-anchor", 'middle')
-    .attr('class', 'tex')
-    .append('text')
-    .style("text-anchor", "end")
-        .attr("x", width)
-    .attr("y", height + margin.top - 30)
-    .text(() => config.axis.x.title);
-*/
-}
-
-function axisY(data, config, dimension) {
-  const axisY = d3.scaleLinear().range([dimension.height, 0]);
-  axisY.domain(config.axis.y.domain);
-  return axisY;
-}
-
-function drawAxisY(svg, data, config, axis, dimension) {
-  svg.append("g")
-    .call(d3.axisLeft(axis.y));
-
-  svg.append('g')
-    .attr("transform", `translate(20,10)`)
-    .attr('class', 'tex')
-    .append('text')
-    .style("text-anchor", "start")
-    .text(() => config.axis.y.title);
-
-/*
-  svg.append("text")
-    .attr("y", 0)
-    .attr("x", 10)
-    .attr("dy", "1em")
-    .style("text-anchor", "start")
-    .text(config.axis.y.title)
-    */
-}
+import {AxisX, AxisY} from './Axis'
 
 function drawPlot(svg, data, axis) {
   svg.selectAll("dot")
     .data(data)
     .enter().append("circle")
     .attr("r", 4)
-    .attr("cx", d => axis.x(d.stddev))
-    .attr("cy", d => axis.y(d.mean));
+    .attr("cx", d => axis.x.scale(d.stddev))
+    .attr("cy", d => axis.y.scale(d.mean));
 }
 
 function draw(graph, props) {
@@ -80,14 +20,15 @@ function draw(graph, props) {
     return
   }
   const svg = createSvg(graph, id, dimension)
+
   const axis = {
-    x: axisX(data, config, dimension),
-    y: axisY(data, config, dimension)
   }
 
+  axis.x = AxisX(config.axis.x, dimension);
+  axis.y = AxisY(config.axis.y, dimension);
+  axis.x.draw(svg)
+  axis.y.draw(svg)
   drawPlot(svg, data, axis)
-  drawAxisX(svg, axis, config, dimension)
-  drawAxisY(svg, data, config, axis, dimension)
   processTex(svg, ".tex")
 }
 

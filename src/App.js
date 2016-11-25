@@ -46,12 +46,18 @@ class App extends Component {
               dimension,
               axis: {
                 x: {
-                  //title: "$\\text{Standard deviation }\\sigma (\\%)$",
-                  title: "Standard deviation (%)",
-                  domain: [0, 30]
+                  scale: 'linear',
+                  ticks: 5,
+                  domain: [0, 30],
+                  legend: {
+                    title: "Standard deviation (%)"
+                  },
                 },
                 y: {
-                  title:'Expected return (%)',
+                  scale: 'linear',
+                  legend: {
+                    title:'Expected return (%)'
+                  },
                   domain: [0, 18]
                 }
               }
