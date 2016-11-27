@@ -2,33 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import * as d3 from "d3";
 import {createSvg} from './D3Utils';
 
-function axisX(data, config) {
-  const {dimension} = config;
-  const axisX = d3.scaleTime().range([0, dimension.width]);
-  axisX.domain(d3.extent(data, d => d.date));
-  return axisX;
-}
-
-function drawAxisX(svg, axis, config) {
-  const {dimension} = config;
-  const {height, width, margin} = dimension;
-
-  svg.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(axis.x).tickFormat(d3.timeFormat("%Y-%b-%d")))
-    .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("dx", "-.8em")
-    .attr("dy", ".15em")
-    .attr("transform", "rotate(-65)");
-
-  // text label for the x axis
-  svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", height + margin.top + 80)
-    .style("text-anchor", "middle")
-    .text(config.axis.x.title);
-}
+import {AxisX, AxisY} from './Axis'
 
 function axisY(data, config) {
   const {dimension} = config;
@@ -58,7 +32,7 @@ function drawAxisY(svg, data, axis, config) {
 
 function line(axis) {
   return d3.line()
-    .x(data => axis.x(data.date))
+    .x(data => axis.x.scale(data.date))
     .y(data => axis.y(data.close));
 }
 
@@ -71,7 +45,7 @@ function drawLine(svg, data, axis) {
 
 function area(axis, dimension) {
   return d3.area()
-    .x(data => axis.x(data.date))
+    .x(data => axis.x.scale(data.date))
     .y0(dimension.height)
     .y1(data => axis.y(data.close));
 }
@@ -101,7 +75,7 @@ function drawGradient(svg, data, axis, config) {
 }
 
 function gridLinesX(axis) {
-  return d3.axisBottom(axis.x)
+  return d3.axisBottom(axis.x.scale)
     .ticks(8)
 }
 
@@ -139,14 +113,15 @@ function draw(graph, props) {
   }
   const svg = createSvg(graph, id, dimension)
   const axis = {
-    x: axisX(data, config),
     y: axisY(data, config)
   }
 
+  axis.x = AxisX(config.axis.x, dimension);
+  axis.x.draw(svg);
   drawLine(svg, data, axis)
   drawArea(svg, data, axis, config)
   drawGradient(svg, data, axis, config)
-  drawAxisX(svg, axis, config)
+  //drawAxisX(svg, axis, config)
   drawAxisY(svg, data, axis, config)
   drawGridLinesX(svg, axis, config)
   drawGridLinesY(svg, axis, config)

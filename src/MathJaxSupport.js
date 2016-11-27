@@ -1,9 +1,10 @@
 //import 'mathjax'
 /* eslint no-undef: 0  */
 import * as d3 from "d3";
-import MathJax_ from 'mathjax'
+//import MathJax_ from 'mathjax'
 import Promise from 'es6-promise'
 
+/*
 function cleanEscapesForTex(s) {
     return s.replace(/(<|&lt;|&#60;)/g, '\\lt ')
         .replace(/(>|&gt;|&#62;)/g, '\\gt ');
@@ -12,9 +13,9 @@ function cleanEscapesForTex(s) {
 export function texToSVG(_texString, config) {
     var randomID = 'math-output-' + 'TODORANDOMSTRING';
     var tmpDiv = d3.select('body').append('div')
-        //.attr({id: randomID})
-        //.style({visibility: 'hidden', position: 'absolute'})
-        //.style({'font-size': config.fontSize + 'px'})
+        .attr({id: randomID})
+        .style({visibility: 'hidden', position: 'absolute'})
+        .style({'font-size': config.fontSize + 'px'})
         .text(cleanEscapesForTex(_texString));
 
     console.log("texToSVG ", _texString)
@@ -42,6 +43,7 @@ export function texToSVG(_texString, config) {
     })
 
 }
+*/
 
 export function processTex(svg, selector) {
   //console.log("processTex ", selector)

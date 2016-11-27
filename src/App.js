@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 //import {InlineMath} from 'react-katex';
 //import KaTeX from 'katex';
 //import 'katex/dist/katex.min.css';
-
+import * as d3 from "d3";
 import Chart from './Chart';
 import Histogram from './Histogram';
 import ScatterPlot from './ScatterPlot'
@@ -39,6 +39,38 @@ class App extends Component {
     return (
       <div className='diagram-container'>
         <div className='diagram'>
+          <h1>Chart</h1>
+          <Chart
+            data={data}
+            id="d3-graph"
+            config={{
+              dimension,
+              axis: {
+                x: {
+                  scale: {
+                    type: 'time',
+                    domain: d3.extent(data, d => d.date),
+                    tickFormat: d3.timeFormat("%Y"),
+                    rotate: -65
+                  },
+                  legend: {
+                    title: "Date",
+                    position: "middle"
+                  }
+
+                },
+                y: {
+                  scale: {
+                  },
+                  legend: {
+                    title:'Price ($)'
+                  }
+                }
+              }
+            }}
+            />
+        </div>
+        <div className='diagram'>
           <h1>Scatter Plot</h1>
           <ScatterPlot
             data={returnStdDev}
@@ -46,19 +78,24 @@ class App extends Component {
               dimension,
               axis: {
                 x: {
-                  scale: 'linear',
-                  ticks: 5,
-                  domain: [0, 30],
+                  scale: {
+                    type: 'linear',
+                    ticks: 5,
+                    domain: [0, 30],
+                  },
                   legend: {
-                    title: "Standard deviation (%)"
+                    title: "Standard deviation (%)",
+                    position: "end"
                   },
                 },
                 y: {
-                  scale: 'linear',
+                  scale: {
+                    type: 'linear',
+                    domain: [0, 18],
+                  },
                   legend: {
                     title:'Expected return (%)'
-                  },
-                  domain: [0, 18]
+                  }
                 }
               }
             }}
@@ -84,24 +121,7 @@ class App extends Component {
 
             />
         </div>
-        <div className='diagram'>
-          <h1>Chart</h1>
-          <Chart
-            data={data}
-            id="d3-graph"
-            config={{
-              dimension,
-              axis: {
-                x: {
-                  title: "Date"
-                },
-                y: {
-                  title:'Price ($)'
-                }
-              }
-            }}
-            />
-        </div>
+
 
 
 
