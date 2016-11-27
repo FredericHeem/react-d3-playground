@@ -15,7 +15,7 @@ function getScaleType(type){
 
 export function AxisX(config, dimension) {
   const {legend, scale: scaleConfig} = config;
-  const {domain, ticks, tickFormat, rotate} = scaleConfig;
+  const {domain/*, ticks*/, tickFormat, rotate} = scaleConfig;
   const {height, width, margin} = dimension;
 
   let scale = getScaleType(scaleConfig.type)

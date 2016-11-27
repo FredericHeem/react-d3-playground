@@ -61,6 +61,7 @@ class App extends Component {
                 },
                 y: {
                   scale: {
+                    domain: [0, d3.max(data, d => d.close)]
                   },
                   legend: {
                     title:'Price ($)'
