@@ -3,31 +3,10 @@ import * as d3 from "d3";
 import {createSvg} from './D3Utils';
 import './Tooltip.css'
 
-function axisX(data, config) {
-  const axisX = d3.scaleLinear().range([0, config.dimension.width]).domain([
-    d3.min(data),
-    d3.max(data)
-  ]);
-  return axisX;
-}
-
-function drawAxisX(svg, axis, config) {
-  const {dimension} = config
-  const {height, width, margin} = dimension;
-
-  svg.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(axis.x))
-
-  svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", height + margin.top + 40)
-    .style("text-anchor", "middle")
-    .text(config.axis.x.title);
-}
+import {AxisX} from './Axis'
 
 function createBins(axis, data) {
-  return d3.histogram().domain(axis.x.domain()).thresholds(axis.x.ticks(40))(data)
+  return d3.histogram().domain(axis.x.scale.domain()).thresholds(axis.x.scale.ticks(40))(data)
 }
 
 function axisY(data, config, bins) {
@@ -58,15 +37,16 @@ function drawAxisY(svg, data, axis, config) {
 
 function drawHistogram(svg, data, axis, config, bins) {
   const {dimension} = config
+  const scaleX = axis.x.scale;
   const bar = svg.selectAll(".bar")
     .data(bins)
     .enter().append("g")
     .attr("class", "bar")
-    .attr("transform", d => `translate(${axis.x(d.x0)}, ${axis.y(d.length / bins.length)})`)
+    .attr("transform", d => `translate(${scaleX(d.x0)}, ${axis.y(d.length / bins.length)})`)
 
   bar.append("rect")
     .attr("x", 1)
-    .attr("width", axis.x(bins[1].x1) - axis.x(bins[1].x0) - 2)
+    .attr("width", scaleX(bins[1].x1) - scaleX(bins[1].x0) - 2)
     .attr("height", d => dimension.height - axis.y(d.length / bins.length))
 }
 
@@ -87,28 +67,19 @@ function draw(graph, props) {
   }
 
   const svg = createSvg(graph, id, dimension)
-  const axis = {
-    x: axisX(data, config)
-  }
+  const axis = {}
+
+  axis.x = AxisX(config.axis.x, dimension);
+  axis.x.draw(svg);
 
   createTooltip(props)
 
-  //console.log("data.length ", data.length)
+  console.log("data.length ", data.length)
   const bins = createBins(axis, data);
-  //console.log("bins.length ", bins.length)
-  bins.forEach(bin => {
-    //console.log(bin)
-    //console.log("length ", bin.length)
-  })
-  /*
-  const sumLengthBin = bins.reduce((acc, bin) => {
-    return acc + bin.length
-  }, 0)
-  */
-  //console.log("sumLengthBin", sumLengthBin);
+  console.log("bins.length ", bins.length)
+
   axis.y = axisY(data, config, bins)
   drawHistogram(svg, data, axis, config, bins)
-  drawAxisX(svg, axis, config)
   drawAxisY(svg, data, axis, config)
 }
 

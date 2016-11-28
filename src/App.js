@@ -112,7 +112,13 @@ class App extends Component {
               dimension,
               axis: {
                 x: {
-                  title: "Rate Of Return (%)"
+                  scale: {
+                    domain: d3.extent(rateOfReturns, d => d)
+                  },
+                  legend: {
+                    title: "Rate of Return (%)",
+                    position: "middle"
+                  }
                 },
                 y: {
                   title: "Frequency (%)"
