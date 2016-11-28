@@ -51,7 +51,7 @@ class App extends Component {
                     type: 'time',
                     domain: d3.extent(data, d => d.date),
                     tickFormat: d3.timeFormat("%Y"),
-                    rotate: -65
+                    rotate: -45
                   },
                   legend: {
                     title: "Date",

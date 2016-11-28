@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { createSvg } from './D3Utils';
-import { processTex } from './MathJaxSupport';
+//import { processTex } from './MathJaxSupport';
 import {AxisX, AxisY} from './Axis'
 
 function drawPlot(svg, data, axis) {
@@ -28,7 +28,7 @@ function draw(graph, props) {
   axis.x.draw(svg)
   axis.y.draw(svg)
   drawPlot(svg, data, axis)
-  processTex(svg, ".tex")
+  //processTex(svg, ".tex")
 }
 
 export default class ScatterPlot extends Component {

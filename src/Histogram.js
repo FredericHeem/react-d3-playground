@@ -4,7 +4,7 @@ import {createSvg} from './D3Utils';
 import './Tooltip.css'
 
 function axisX(data, config) {
-  const axisX = d3.scaleLinear().rangeRound([0, config.dimension.width]).domain([
+  const axisX = d3.scaleLinear().range([0, config.dimension.width]).domain([
     d3.min(data),
     d3.max(data)
   ]);
