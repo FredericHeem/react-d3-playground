@@ -1,3 +1,6 @@
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/FredericHeem/react-d3-playground.svg)](https://greenkeeper.io/)
+
 An example on how to use D3 and React to draw charts, histograms and other diagrams: [see live demo](https://fredericheem.github.io/react-d3-playground)
 
 * a chart describing the price of an instrument.
